@@ -8,7 +8,7 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  AWS_ROLE: ${{ secrets.AWS_ACTION_ROLE}}
+  AWS_ROLE: ${{ secrets.AWS_ACTION_ROLE }}
 
 permissions:
   id-token: write   # Required for OIDC
@@ -21,10 +21,10 @@ jobs:
       - name: clone repo
         uses: actions/checkout@v3
       - name: AWS creds configs
-        uses: aws-actions/configure-aws-credentials@V4.0.0
+        uses: aws-actions/configure-aws-credentials@v4.0.0
         with:
-          role-to-assume: ${{ env.AWS_ROLE}}     # OIDC
-          aws-region: ${{ env.AWS_REGION}}
+          role-to-assume: ${{ env.AWS_ROLE }}     # OIDC
+          aws-region: ${{ env.AWS_REGION }}
  
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v1
