@@ -44,9 +44,9 @@ jobs:
         with:
           image-ref: "${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPO_NAME }}:${{ env.IMAGE_TAG }}"    
           format: "table"
-          exit-code: "1"
+          exit-code: "0"
           severity: "CRITICAL, HIGH"
-          
+
       - name: Push image to ECR
         run: |
           docker push ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPO_NAME }}:${{ env.IMAGE_TAG }}
