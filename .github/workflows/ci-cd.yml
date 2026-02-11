@@ -23,16 +23,7 @@ jobs:
     steps:
       - name: clone repo
         uses: actions/checkout@v3
-        
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: "fs" # Scans filesystem (repo)
-          format: "table" # Output format (table, json, sarif)
-          exit-code: "0" # Fails if vulnerabilities found
-          severity: "CRITICAL, HIGH" # Only fail on critical/high
-          ignore-unfixed: true # ignore unfixed vulnerabilities
-      
+              
       - name: AWS creds configs
         uses: aws-actions/configure-aws-credentials@v4.0.0
         with:
@@ -47,6 +38,14 @@ jobs:
         id: build-and-tag
         run: |
           docker build -t ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPO_NAME }}:${{ env.IMAGE_TAG }} .
+
+      - name: Scan with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: "${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPO_NAME }}:${{ env.IMAGE_TAG }}"    
+          format: "table"
+          exit-code: "1"
+          severity: "CRITICAL, HIGH"
           
       - name: Push image to ECR
         run: |
